@@ -105,23 +105,6 @@
             </div>
         </div>
     </div>
-
-
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="star-rating">
-                    <span id="fa" class="fa-regular fa-star " data-rating="1"></span>
-                    <span id="fa" class="fa-regular fa-star" data-rating="2" ></span>
-                    <span id="fa"  class="fa-regular fa-star" data-rating="3"></span>
-                    <span id="fa" class="fa-regular fa-star" data-rating="4" ></span>
-                    <span id="fa" class="fa-regular fa-star" data-rating="5"></span>
-                        <input type="hidden" name="whatever1" class="rating-value" value="">
-                </div>
-            </div>
-        </div>
-    </div>
-
 @endsection
 @section('script')
 
@@ -142,22 +125,5 @@
                 }
             })
         }
-
-            var $star_rating = $('.star-rating #fa');
-
-            var SetRatingStar = function(){
-            return $star_rating.each(function() {
-            if (parseInt($star_rating.siblings('input.rating-value').val()) >= parseInt($(this).data('rating'))) {
-            return $(this).removeClass('fa-regular').addClass('fa-solid');
-        } else {
-            return $(this).removeClass('fa-solid').addClass('fa-regular');
-        }
-        });
-        };
-            $star_rating.on('click', function() {
-            $star_rating.siblings('input.rating-value').val($(this).data('rating'));
-            return SetRatingStar();
-        });
-            console.log($star_rating);
     </script>
 @endsection
