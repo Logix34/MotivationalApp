@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Collection;
 use App\Models\Quote;
+use App\Models\Rating;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -46,7 +47,39 @@ class CollectionController extends Controller
                  "data"        =>$collection,
              ]);
     }
-
+    public function getCollectionRating(){
+        $collections=Collection::with('quotes')->withAvg('ratings','rating')->get();
+        return response()->json([
+            "status"     =>'success',
+            "collection_rating"   =>$collections,
+        ]);
+    }
+    public function sendCollectionRating(Request $request){
+        $request->validate([
+            'collection_id'     => 'required|exists:collections,id',
+            'rating'            => 'required|integer|between:1,5',
+        ]);
+        try{
+            if($request->collection_id){
+                Rating::create([
+                    'collection_id' => $request['collection_id'],
+                    'rating'        => $request['rating'],
+                ]);
+                return response()->json([
+                    "status"     =>'success',
+                    "message"    =>'ratings Send Successfully',
+                ]);
+            }else{
+                return response()->json([
+                    "status"     =>'failed',
+                    "message"    =>'ratings Send failed',
+                ]);
+            }
+        }
+        catch (\Exception $e) {
+           return  $e->getMessage() . "on line" . $e->getLine();
+        }
+    }
     public function createCollection(Request $request)
     {
         $request->validate([
@@ -86,17 +119,28 @@ class CollectionController extends Controller
             return  $e->getMessage() . "on line" . $e->getLine();
         }
     }
-
-    public function addToCollection(Request $request)
+    public function destroy(Request $request)
     {
         $request->validate([
-            'collection_name'     => 'required',
-            'quote_id'            => 'required'
+            'id'     => 'required',
         ]);
+        try {
+            $collection=Collection::find($request['id'])->quotes->count();
+            if($collection > 0) {
+                return response()->json([
+                    "status" => 'failed',
+                    "msg" => "Collection have " .$collection. ' quotes',
+                ]);
+            }else{
+                Collection::whereId($request['id'])->delete();
+                return response()->json([
+                    "status" => 'success',
+                    "msg" => 'collection delete successfully',
+                ]);
+            }
 
-    }
-    public function destroy($id)
-    {
-
+        }catch (\Exception $e) {
+            return  $e->getMessage() . "on line" . $e->getLine();
+        }
     }
 }
