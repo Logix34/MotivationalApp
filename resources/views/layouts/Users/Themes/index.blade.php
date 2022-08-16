@@ -23,9 +23,9 @@
                         <tbody>
                             @foreach($userThemes as $userTheme)
                                 <tr>
-                                    <td>{{$userTheme->theme->name}}</td>
-                                    <td>{{$userTheme->theme->created_at->format('d-m-y g:i A')}}</td>
-                                    <td><img src="{{$userTheme->theme->background_image}}" height="150px" width="150px" class="ml-5"></td>
+                                    <td>{{$userTheme->name}}</td>
+                                    <td>{{$userTheme->created_at->format('d-m-y g:i A')}}</td>
+                                    <td><img src="{{$userTheme->background_image}}" height="150px" width="150px" class="ml-5"></td>
                                 </tr>
                             @endforeach
                         </tbody>

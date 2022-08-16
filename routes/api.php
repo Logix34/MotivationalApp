@@ -37,6 +37,7 @@ Route::post('reset',[LoginController::class,'reset']);
 
 Route::group(['middleware' => ['auth:sanctum','language']], function () {
     Route::get('users_list',[UserController::class,'index']);
+    Route::post('/add-theme',[UserController::class,'addTheme']);
     Route::get('category_list',[CategoryController::class,'index']);
     Route::get('sub-category_list',[SubCategoryController::class,'index']);
 

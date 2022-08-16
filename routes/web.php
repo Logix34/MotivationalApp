@@ -40,7 +40,6 @@ Route::post('submit_reset',[AdminController::class,'postReset'])->name('submit_r
 
 //..............Protected Routes............///////////////
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('star',[AdminController::class,'star']);
     Route::get('dashboard',[UserController::class,'index'])->name('dashboard');
     /////////////////////////........Users  Section......///////////////////
     Route::get('/users',[UserController::class,'user'])->name('users');
