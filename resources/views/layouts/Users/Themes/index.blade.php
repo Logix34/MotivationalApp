@@ -16,7 +16,7 @@
                         <tr>
                             <th> Theme Name</th>
                             <th>Created At</th>
-                            <th>Background Image</th>
+                            <th>Theme's Image</th>
                         </tr>
                         </thead>
 
