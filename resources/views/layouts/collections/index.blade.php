@@ -42,7 +42,9 @@
                                                         <span id="fa{{$k}}" class="fa-star fa-regular"  data-rating="3" ></span>
                                                         <span id="fa{{$k}}" class="fa-star fa-regular"  data-rating="4" ></span>
                                                         <span id="fa{{$k}}" class="fa-star fa-regular"  data-rating="5" ></span>
-                                                        <input type="hidden" name="whatever1" class="rating-value" value="{{$collection->ratings_avg_rating}}">
+                                                        <input type="hidden"  id="collection_rating{{$k}}" name="rating" class="rating-value" value="{{$collection->ratings_avg_rating}}">
+                                                        <input type="hidden" id="collection_id{{$k}}" name="collection_id" value="{{$collection->id}}">
+                                                        {{$collection->id}}
                                                     </div>
                                                 </div>
                                             </div>
@@ -68,13 +70,21 @@
 @endsection
 @section('script')
     <script>
-
-
         $( document ).ready(function() {
-        var SetRatingStar = function(id){
+            var SetRatingStar = function(id){
             var $star_rating = $('.star-rating'+id+' #fa'+id);
-                        console.log($star_rating)
 
+                $star_rating.on('click', function () {
+                    var werw=$star_rating.siblings('input.rating-value').val($(this).data('rating'));
+                    ajaxCall(id);
+                    return $star_rating.each(function() {
+                        if (parseInt($star_rating.siblings('input.rating-value').val()) >= parseInt($(this).data('rating'))) {
+                            return $(this).removeClass('fa-regular').addClass('fa-solid');
+                        }else{
+                            return $(this).removeClass('fa-solid').addClass('fa-regular');
+                        }
+                    });
+                });
             return $star_rating.each(function() {
                 if (parseInt($star_rating.siblings('input.rating-value').val()) >= parseInt($(this).data('rating'))) {
                     return $(this).removeClass('fa-regular').addClass('fa-solid');
@@ -83,18 +93,28 @@
                 }
             });
         };
-       @foreach($collections as $k=>$collection)
-        SetRatingStar({{$k}});
-        @endforeach
+            @foreach($collections as $k=>$collection)
+            SetRatingStar({{$k}});
+            @endforeach
 
 
-        // $star_rating.on('click', function() {
-        //     $star_rating.siblings('input.rating-value').val($(this).data('rating'));
-        //     return SetRatingStar();
-        // });
         });
+        function ajaxCall(id){
+            $.ajax({
+                method:'POST',
+                headers: {
+                    'X-CSRF-Token':' {{csrf_token()}}'
+                },
+                data: {
+                    'collection_id' : $('#collection_id'+id).val(),
+                    'rating'        :$('#collection_rating'+id).val(),
+                },
+                url: "collection-ratings",
+                success:function (data) {
+                   location.reload();
 
-
-
+                }
+            });
+        }
     </script>
 @endsection

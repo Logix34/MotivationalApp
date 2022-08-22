@@ -9,8 +9,9 @@ class Rating extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'collection_id',
         'rating',
+        'collection_id',
+
     ];
     public function collection(){
         return $this->belongsTo(Collection::class);

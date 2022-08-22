@@ -68,6 +68,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/collections',[CollectionController::class,'index'])->name('collections');
     Route::get('/collection_list',[CollectionController::class,'collectionList'])->name('collection-list');
     Route::get('change_collection-type/{id}', [CollectionController::class,'changeCollectionType'])->name('changeCollectionType');
+    Route::post('collection-ratings',[CollectionController::class,'sendCollectionRating'])->name('sendCollectionRating');
 
 
 

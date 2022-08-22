@@ -36,7 +36,7 @@
                         <div class="col-lg-12 ">
                             <div class="p-5">
                                 <div class="text-center">
-                                    <h1 class="h4 text-gray-900 mb-4">Welcome Motivation App!</h1>
+                                    <h1 class="h4 text-gray-900 mb-4">Welcome Motivational App!</h1>
                                 </div>
                                 <form class="user" action="{{route('verify_login')}}" method="POST" id="login-form" autocomplete="off" >
                                     @csrf

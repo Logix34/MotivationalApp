@@ -23,9 +23,8 @@ class CollectionController extends Controller
 //            ->join('collections', 'id', '=', 'quotes.collection_id')
 //           ->where('collections.collection_id', $post)
 //            ->get();
-        $collections=Collection::with('quotes')->withAvg('ratings','rating')->get();
-//        $ratings=Rating::whereCollectionId()->avg('rating')
 
+        $collections=Collection::with('quotes')->withAvg('ratings','rating')->get();
         return view('layouts.collections.index',compact('collections'));
     }
 
@@ -47,17 +46,32 @@ class CollectionController extends Controller
 
 ////////////////.................Collection Rating section..........////////////////////////
 
+    public function sendCollectionRating(Request $request){
+        $request->validate([
+            'collection_id'     => 'required|exists:collections,id',
+            'rating'            => 'required|integer|between:1,5',
+             ]);
+        try{
+            if($request->collection_id){
+               $rating= Rating::create([
+                    'collection_id' => $request['collection_id'],
+                    'rating'        => $request['rating'],
+                ]);
+               return response()->json([
+                    "success" => [
+                        "message" => "Collection Ratings Send successfully"
+                    ]
+                ]);
 
+            }else{
+                Session::flash('error','Collection Ratings Send failed');
+                return redirect('collections');
+            }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        }
+        catch (\Exception $e) {
+            return  $e->getMessage() . "on line" . $e->getLine();
+        }
     }
 
     /**
